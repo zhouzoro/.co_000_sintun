@@ -4,32 +4,22 @@
 @parent
 @include('contents.carousel')
 <div class="home-below row">
-  <div class="col-md-3 col-sm-3 col-xs-3"><a href="/products" class="poster"><img src="images/p1.jpg"/></a></div>
-  <div class="col-md-3 col-sm-3 col-xs-3"><a href="/products" class="poster"><img src="images/p2.jpg"/></a></div>
-  <div class="col-md-3 col-sm-3 col-xs-3"><a href="/products" class="poster"><img src="images/p3.jpg"/></a></div>
-  <div class="col-md-3 col-sm-3 col-xs-3"><a href="/products" class="poster"><img src="images/p4.jpg"/></a></div>
+  <div class="col-md-3 col-sm-3 col-xs-3"><a title="深海鲈鱼" href="/products#3" style="background: url('/images/p1.jpg');background-size: cover" class="poster"></a></div>
+  <div class="col-md-3 col-sm-3 col-xs-3"><a title="鸭嘴鱼" href="/products#2" style="background: url('/images/p2.jpg');background-size: cover" class="poster"></a></div>
+  <div class="col-md-3 col-sm-3 col-xs-3"><a title="巴沙鱼柳" href="/products#1" style="background: url('/images/p3.jpg');background-size: cover" class="poster"></a></div>
+  <div class="col-md-3 col-sm-3 col-xs-3"><a title="鱼子酱" href="/products#4" style="background: url('/images/p4.jpg');background-size: cover" class="poster"></a></div>
 </div>
-<div class="home-below row">
-  <div class="col-md-6 col-sm-6 col-xs-6">
+<!--div class="home-below row">
     <div class="news-list fix-size">
       <h3>信豚动态</h3>
       <div class="ui divided list">
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>新闻动态新闻动态新闻动态新闻动态<span class="date">2016-06-06</span></a></div>
-        <div class="item"><a>更多</a></div>
+        @if(isset($articles))
+          @foreach($articles as $index => $article)
+            <div class="item"><a href="{{'/news/'.$article->id}}">{{$article->title}}<span class="date">{{substr($article->updated_at,0,10)}}</span></a></div>
+          @endforeach
+        @endif
+        <div class="item"><a href="/news">更多</a></div>
       </div>
-    </div>
   </div>
-  <div class="col-md-6 col-sm-6 col-xs-6">
-    <div class="product-feature fix-size">
-      <h3>特色产品</h3>
-      <div class="ui devided list"></div>
-    </div>
-  </div>
-</div>@endsection
+</div-->
+@endsection

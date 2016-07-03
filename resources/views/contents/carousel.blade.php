@@ -9,7 +9,7 @@
 	    @if(isset($carouselItems))
 	    	@foreach($carouselItems as $index=>$item)
 		    	@if($index < 4)
-			        <div class='{{$index == 0?"item active":"item"}}'><img src='{{$item->cover}}' alt="slider image" class="slr-img cursor-pointer" href='{{"/cruiser_reports/".$item->id}}'>
+			        <div class='{{$index == 0?"item active":"item"}}'><img src='{{$item->cover}}' alt="slider image" class="slr-img" href='{{"/cruiser_reports/".$item->id}}'>
 			            <div class="carousel-caption">
 			                <h2><a href='{{"/cruiser_reports/".$item->id}}'>{{$item->title}}</a></h2>
 			                <label class="slabelextra">
@@ -23,7 +23,7 @@
 	    @else
 	        <div class="item active">
 		        <div class="blur-bg" style="background: url('/images/carousel/1.jpg');background-size: cover;"></div>
-		        <img src="/images/carousel/1.jpg" alt="slider image" class="slr-img cursor-pointer">
+		        <img src="/images/carousel/1.jpg" alt="slider image" class="slr-img">
 	            <div class="carousel-caption">
 	                <h2 href=""></h2>
 	                <label class="slabelextra">
@@ -34,7 +34,7 @@
 	        </div>
 	        <div class="item">
 		        <div class="blur-bg" style="background: url('/images/carousel/2.jpg');background-size: cover;"></div>
-		        <img src="/images/carousel/2.jpg" alt="slider image" class="slr-img cursor-pointer">
+		        <img src="/images/carousel/2.jpg" alt="slider image" class="slr-img">
 	            <div class="carousel-caption">
 	                <h2 href=""></h2>
 	                <label class="slabelextra">
@@ -45,7 +45,7 @@
 	        </div>
 	        <div class="item">
 		        <div class="blur-bg" style="background: url('/images/carousel/3.jpg');background-size: cover;"></div>
-		        <img src="/images/carousel/3.jpg" alt="slider image" class="slr-img cursor-pointer">
+		        <img src="/images/carousel/3.jpg" alt="slider image" class="slr-img">
 	            <div class="carousel-caption">
 	                <h2 href=""></h2>
 	                <label class="slabelextra">
@@ -56,7 +56,7 @@
 	        </div>
 	        <div class="item">
 		        <div class="blur-bg" style="background: url('/images/carousel/4.jpg');background-size: cover;"></div>
-		        <img src="/images/carousel/4.jpg" alt="slider image" class="slr-img cursor-pointer">
+		        <img src="/images/carousel/4.jpg" alt="slider image" class="slr-img">
 	            <div class="carousel-caption">
 	                <h2 href=""></h2>
 	                <label class="slabelextra">

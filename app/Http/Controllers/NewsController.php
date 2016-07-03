@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\News;
+
 class NewsController extends Controller
 {
     /**
@@ -15,7 +17,12 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        $articles = News::select('*')
+                ->orderBy('updated_at', 'desc')
+                ->skip(0)
+                ->take(12)
+                ->get();
+        return view('news',['articles' => $articles]);
     }
 
     /**
@@ -36,7 +43,12 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newPost = new News;
+        $newPost->author = $request->input('author');
+        $newPost->title = $request->input('title');
+        $newPost->content = $request->input('content');
+        $newPost->save();
+        return response()->json(['status' => '200','msg' => 'success','url' => '/news/'.strval($newPost->id)]);
     }
 
     /**
@@ -47,7 +59,8 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = News::where('id', $id)->first();
+        return view('article', ['post' => $post]);
     }
 
     /**

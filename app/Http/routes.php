@@ -26,37 +26,33 @@ Route::get('/upload/files',function(){
 //Route::resource('cruiser_report','CruiserReportController');
 
 //==pages=====================//
-Route::get('/', function () {
-    return view('index');
-	/**$posts = DB::table('cruiser_reports')
-                ->join('users', function ($join){
-                        $join->on('users.id', '=', 'cruiser_reports.author');
-                })
-                ->select('cruiser_reports.*','users.username as author_name')
+Route::get('/', function (Request $request) {
+	$articles = DB::table('news')
+                ->select('*')
                 ->orderBy('updated_at', 'desc')
                 ->skip(0)
                 ->take(6)
                 ->get();
-    return view('layouts.index',['carouselItems' => $posts,'articles' => $posts]);**/
+    return view('index',['articles' => $articles, 'req' => $request]);
 });
 
 
-Route::get('/about', function () {
-    return view('about');
+Route::get('/about', function (Request $request) {
+    return view('about',['req' => $request]);
 });
 
-Route::get('/products', function () {
-    return view('products');
+Route::get('/products', function (Request $request) {
+    return view('products',['req' => $request]);
 });
 
-Route::get('/career', function () {
-    return view('career');
+Route::get('/career', function (Request $request) {
+    return view('career',['req' => $request]);
 });
-Route::get('/cooperation', function () {
-    return view('cooperation');
+Route::get('/cooperation', function (Request $request) {
+    return view('cooperation',['req' => $request]);
 });
-Route::get('/contact', function () {
-    return view('contact');
+Route::get('/contact', function (Request $request) {
+    return view('contact',['req' => $request]);
 });
 
 //==pages=====================//
@@ -67,11 +63,11 @@ Route::get('/home', function () {
     return redirect('/');
 });
 //==users=====================//
-Route::get('/root',function(){
-    	return view('layouts.loginPage');
+Route::get('/root',function(Request $request){
+    	return view('layouts.loginPage',['req' => $request]);
     });
-Route::get('/test',function(){
-    	return view('root');
+Route::get('/test',function(Request $request){
+    	return view('root',['req' => $request]);
     });
 
 Route::post('/root','UserController@login');

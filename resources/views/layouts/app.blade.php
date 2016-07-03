@@ -7,7 +7,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta property="qc:admins" content="1455576553251356375" />
         <link rel="stylesheet" href="/stylesheets/dist/bootstrap-grid.min.css">
         <link rel="stylesheet" href="/semantic/semantic.min.css">
 
@@ -24,6 +23,11 @@
                 
                 <!--common header-->
                 @include('layouts.header')
+                <div class="crum">
+                    @section('crum')
+                    @show
+                    
+                </div>
 
                 <!--body to show-->
                 @section('main')
@@ -46,7 +50,6 @@
             <script src="/semantic/semantic.min.js"></script>
              <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>-->
         @show
-
         @section('additional-scripts')
             <!--script src='/javascripts/dist/vibrant.min.js' -->
             <script src="/javascripts/dist/main.babeled.min.js"></script>

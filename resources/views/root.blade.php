@@ -11,6 +11,7 @@
   <h2 class="content">网站内容管理</h2>
 </div>
 <div class="row manage-panel">
+  <label class="operation-message"></label>
   <div class="col-md-3 col-sm-3 col-xs-3">
     <div class="ui vertical menu"><a data-tab='1' class="item active"><i class="fa fa-plus-square"></i><span> 添加新闻</span></a><a data-tab='2' class="item"><i class="fa fa-list-alt"></i><span> 管理新闻</span></a>
       <div class="item"><i class="fa fa-list"></i><span> 管理页面</span>
@@ -37,9 +38,12 @@
         <div id="frm-body">
           <div id="input-body"><br/></div>
         </div>
+        <div class="hidden">
+          <input name="content" type="text" class="content"/>
+        </div>
       </form>
       <div id="ops">
-        <div id="btn-upload" onclick="uploadPost()" class="ui labeled icon button basic teal small">发布<i class="icon send outline"></i></div>
+        <div id="btn-upload" onclick="uploadPost(&quot;#frm&quot;)" class="ui labeled icon button basic teal small">发布<i class="icon send outline"></i></div>
         <div id="btn-img" class="ui labeled icon button basic orange small">添加图片<i class="icon file image outline"></i></div>
       </div>
     </div>

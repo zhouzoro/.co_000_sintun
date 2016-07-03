@@ -1,0 +1,12 @@
+@extends('layouts.app')
+
+@section('main')
+@parent
+.article
+	h2.title!= '{!!$post->title!!}'
+	.meta
+		label.date!= '{!!$post->created_at!!}'
+		label.author!= '{!!$post->author!!}'
+	.content!= '{!!$post->content!!}'
+
+@endsection

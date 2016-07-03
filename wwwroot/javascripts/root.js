@@ -69,9 +69,9 @@ function updatePage(el) {
         xhr.onload = function() {
             var res = JSON.parse(xhr.responseText);
             if (res.status == '200') {
-                showTipMsg('更新成功');
+                showTipMsg('更新'+$form.find('input[name=type]')+'成功',1);
             } else if (res.status == '504') {
-                showTipMsg('上传失败: ' + res.msg, 0);
+                showTipMsg('更新失败: ' + res.msg, 0);
             }
         };
 
@@ -82,10 +82,12 @@ function updatePage(el) {
     });
 }
 
-function uploadPost() {
+function uploadPost(formSelector) {
+    var $form = $(formSelector);
+
     tinymce.activeEditor.uploadImages(function(success) {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/cruiser_reports');
+        xhr.open('POST', '/news');
 
         xhr.onload = function() {
             var res = JSON.parse(xhr.responseText);
@@ -97,12 +99,8 @@ function uploadPost() {
         };
 
         var contentHtml = tinymce.activeEditor.save();
-        var quote = getQuoteText(contentHtml);
-        $('input[name=content]').val(contentHtml);
-        $('input[name=quote]').val(quote);
-        var formData = new FormData($('form#frm')[0]);
-        formData.append('username', Cookies.get('username'));
-        formData.append('email', Cookies.get('email'));
+        $form.find('input[name=content]').val(contentHtml);
+        var formData = new FormData($form[0]);
         xhr.send(formData);
     });
 }
@@ -123,16 +121,13 @@ function updatePost(formId) {
             }
         };
         var contentHtml = tinymce.activeEditor.save();
-        var quote = getQuoteText(contentHtml);
         $('input[name=content]').val(contentHtml);
-        $('input[name=quote]').val(quote);
         var formData = new FormData(form[0]);
         formData.append('username', Cookies.get('username'));
         formData.append('email', Cookies.get('email'));
         xhr.send(formData);
     });
 }
-
 
 function initMce(selector, docId) {
     var inline = docId ? true : false;

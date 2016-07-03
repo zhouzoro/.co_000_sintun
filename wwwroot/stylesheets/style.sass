@@ -48,8 +48,13 @@ body.full-screen
 			padding-top: 10px
 		a.switch-lang
 			position: absolute
+			top: 86px
+			left: 16px
 			font-size: 0.8rem
 			padding: 8px 24px
+			span
+				position: relative
+				top: -4px 
 		a.logo
 			img
 				width: 176px
@@ -76,10 +81,16 @@ body.full-screen
 		border-left: 2px solid $bg-dark
 		transform: translateY(29px)
 		padding-left: 12px
+	.crum
+		padding-left: 16px
+		a
+			padding: 4px 2px
 	#carousel-slide
 		height: $carousel-height
 		.carousel-inner
 			.item
+				width: 100%
+				height: $carousel-height
 				.blur-bg
 					position: absolute
 					width: 100%
@@ -87,9 +98,10 @@ body.full-screen
 					filter: blur(20px) grayscale(20%)
 					z-index: -1
 				img
-					width: 100%
 					height: $carousel-height
-					object-fit: contain
+					width: auto
+					margin: auto
+
 	.home-below
 		padding: 0px 15px
 		.fix-size
@@ -103,7 +115,6 @@ body.full-screen
 			color: white
 			padding: 8px
 		.news-list
-			float: right
 			.ui.list
 				.item
 					padding: 4px 4px 2px 8px
@@ -117,18 +128,26 @@ body.full-screen
 				display: inline-block
 				width: 100%
 				height: 189px
+				background-size: cover
 				overflow: hidden
+				border-left: 1px solid lightgray
 				img
 					width: 100%
 					height: 100%
 					object-fit: cover
-					border-left: 1px solid lightgray
+					border-left: 1px solid $bg
 		.col-md-3:first-child
 			a.poster
+				border-left: none
 				img
 					border-left: none
 
-
+	.sintun-news
+		padding: 24px 48px
+		.item
+			padding: 4px 8px 2px 4px
+		.date
+			float: right
 	.products
 		.product-frame
 			padding: 24px 64px
@@ -136,7 +155,14 @@ body.full-screen
 			min-height: 432px
 			border-bottom: 1px solid $bg-dark
 			.p-intro
-				h2,p
+				h2
+					padding: 8px 16px
+					margin-top: 24px
+					margin-bottom: 0px
+					background: $bg-dark
+					color: white
+					border-bottom: 2px solid $bg
+				p
 					padding: 12px
 			.product
 				cursor: pointer
@@ -159,6 +185,8 @@ body.full-screen
 					img.active
 						transform: translateX(0px)
 						display: inline-block
+		.product-frame:last-child
+			border-bottom: none
 		.product-container.full-screen
 			.product
 				position: fixed
@@ -201,6 +229,12 @@ body.full-screen
 		.user-access-btn
 			display: inline-block
 			margin-left: 24px
+	.article
+		padding: 24px 48px
+		.meta
+			padding-bottom: 12px
+		p
+			text-indent: 24px
 	footer
 		width: 100%
 		text-align: center
