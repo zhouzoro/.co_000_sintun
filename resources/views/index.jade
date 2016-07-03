@@ -1,0 +1,45 @@
+@extends('layouts.app')
+
+@section('main')
+@parent
+@include('contents.carousel')
+.home-below.row
+	.col-md-3.col-sm-3.col-xs-3
+		a.poster(href='/products')
+			img(src="images/p1.jpg")
+	.col-md-3.col-sm-3.col-xs-3
+		a.poster(href='/products')
+			img(src="images/p2.jpg")
+	.col-md-3.col-sm-3.col-xs-3
+		a.poster(href='/products')
+			img(src="images/p3.jpg")
+	.col-md-3.col-sm-3.col-xs-3
+		a.poster(href='/products')
+			img(src="images/p4.jpg")
+.home-below.row
+	.col-md-6.col-sm-6.col-xs-6
+		.news-list.fix-size
+			h3 信豚动态
+			.ui.divided.list
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 新闻动态新闻动态新闻动态新闻动态
+					span.date 2016-06-06
+				.item: a 更多
+	.col-md-6.col-sm-6.col-xs-6
+		.product-feature.fix-size
+			h3 特色产品
+			.ui.devided.list
+@endsection

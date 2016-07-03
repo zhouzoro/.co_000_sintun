@@ -1,0 +1,94 @@
+@charset "utf-8"
+
+$font-stack: Helvetica, Tahoma, Arial, STXihei, “华文细黑”, “Microsoft YaHei”, “微软雅黑”, SimSun, “宋体”, Heiti, “黑体”, sans-serif
+$prim-color: #C90
+$header-height: 96px
+$html-bg: #F4F2F0
+$bg:#60B7E0
+$bg-dark: #2A4F76
+$carousel-height: 624px
+$carousel-height-medi: 424px
+$carousel-height-min: 289px
+$post-hero-height-max: 524px
+$post-hero-height: 464px
+$nav-height: 81px
+$bg-blur: rgba(255, 255, 255,0.9)
+$light-border: 1px solid lightgray
+$color-border: 1px solid $bg
+
+.mce-toolbar-grp.mce-container.mce-panel.mce-stack-layout-item.mce-first,
+.mce-toolbar-grp.mce-container.mce-panel.mce-abs-layout-item.mce-first.mce-last
+	border: 1px solid $bg
+	transition: position 0.6s
+
+.mce-toolbar-grp.mce-container.mce-panel.mce-stack-layout-item.mce-first.pinned,
+.mce-toolbar-grp.mce-container.mce-panel.mce-abs-layout-item.mce-first.mce-last.pinned
+	position: fixed
+	top: 4px
+
+.main-content
+	.main
+		.header
+			padding: 8px
+			margin: 12px
+			color: $bg-dark
+			border-bottom: 4px solid $bg
+		.manage-panel
+			padding: 16px
+.item
+	.menu
+		padding-left: 12px
+	i
+		padding-right: 8px
+.operation-message
+	padding: 8px 24px
+.operation-message.aye
+	border: rgba(56,244,64,0.9)
+	background: rgba(56,144,64,0.4)
+	color: rgba(56,244,64,0.9)
+.operation-message.nay
+	border: rgba(244,56,64,0.9)
+	background: rgba(144,56,64,0.4)
+	color: rgba(244,56,64,0.9)
+.tabs-co
+	.tab
+		border: 1px solid lightgray
+		border-radius: 5px
+		padding: 8px 0px
+		.header
+			padding: 8px
+			margin: 12px
+			color: $bg-dark
+			border-bottom: 2px solid $bg
+		#frm
+			position: relative
+			top: -24px
+			#ul_title
+				padding: 5px 4px
+				.title
+					padding: 6px 16px
+					font-size: 24px
+					line-height: 150%
+					width: 100%
+				input.title
+					background: rgba(255,255,255,0.8)
+					font-weight: 600
+			#ul_author
+				padding-left: 24px
+		#frm-secu
+			p.tip-message
+				margin-top: 4px
+				padding: 12px 24px
+				border-radius: 4px
+			.ui.input
+				display: block
+				margin: 12px
+				input
+					width: 264px
+
+#ops
+	padding: 0px 12px
+	background: white
+#frm-body
+	padding: 8px 20px
+	border-radius: 3px

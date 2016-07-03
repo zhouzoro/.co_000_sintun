@@ -1,0 +1,21 @@
+form#update-form(method="put" data-type="evt" action!="'/cruiser_reports/'.$post->id" enctype="multipart/form-data")
+	{{ csrf_field() }}
+	#ul_title
+		.title.ui.input
+			input#input-title.title(name="title" rows="1" autofocus="autofocus" required="required" placeholder="标题" value!='{{$post->title}}')
+	.mce-top-indicator
+	#frm-body
+		.mymce-container
+			#input-body
+				br
+	.hidden
+		input.input-content(type="text" name="content" value!='{{$post->content}}')
+		input.input-quote(type="text" name="quote")
+		input.input-hero-img(type="text" name="cover" value!='{{$post->cover}}')
+#ops
+	#btn-upload.ui.labeled.icon.button.basic.teal.small(onclick='updatePost("#update-form")') 更新
+		i.icon.send.outline
+	#btn-img.ui.labeled.icon.button.basic.orange.small 图片
+		i.icon.file.image.outline
+	#btn-cancel.ui.labeled.icon.button.basic.teal.small 预览
+		i.icon.eye

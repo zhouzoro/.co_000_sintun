@@ -1,0 +1,4 @@
+.nav-bar-co
+	-var menuItems=[{title:'关于信豚',href:'/about'},{title:'信豚动态',href:'/news'},{title:'产品展示',href:'/products'},{title:'商业合作',href:'/cooperation'},{title:'招贤纳士',href:'/career'},{title:'联系我们',href:'/contact'}]
+	each item, index in menuItems
+		a.menu-item(href=item.href)= item.title
