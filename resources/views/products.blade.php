@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('page-title')
 <title>{{$req->lang=="en" ? "Products--SINTUN" : "产品展示——上海信豚实业有限公司"}}</title>@endsection
-@section('crum')<a href="/">首页</a><i class="icon angle double right"></i><a href="#">产品展示</a>@endsection
+@section('crum')<a href="{{$req->lang=="en" ? '/en' : '/'}}">{{$req->lang=="en" ? 'Home' : '首页'}}</a><i class="icon angle double right"></i><a href="#">{{$req->lang=="en" ? 'Products' : '产品展示'}}</a>@endsection
 @section('main')
 <div class="products">
   <div id="1" class="product-frame row">

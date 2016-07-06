@@ -15,14 +15,14 @@ class NewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $articles = News::select('*')
                 ->orderBy('updated_at', 'desc')
                 ->skip(0)
                 ->take(12)
                 ->get();
-        return view('news',['articles' => $articles]);
+        return view('news',['articles' => $articles, 'req' => $request]);
     }
 
     /**
@@ -57,10 +57,15 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $post = News::where('id', $id)->first();
-        return view('article', ['post' => $post]);
+        if(News::where('id', $id)->count()==1){
+
+            $post = News::where('id', $id)->first();
+            return view('article', ['post' => $post, 'req' => $request]);
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -95,5 +100,10 @@ class NewsController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function redirectImages($imgname){
+        return response()->file(base_path('wwwroot\\images\\'.$imgname));
+
     }
 }

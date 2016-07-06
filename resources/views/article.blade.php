@@ -6,10 +6,10 @@
 @section('main')
 @parent
 <div class="article">
-  <h2 class="title">{!!$post->title!!}</h2>
+  <h2 class="title">{{$post->title}}</h2>
   <div class="meta">
-    <label class="date">{!!$post->created_at!!}</label>
-    <label class="author">{!!$post->author!!}</label>
+    <label class="date">{{substr($post->updated_at,0,10)}}</label>
+    <label class="author">{{$post->author}}</label>
   </div>
   <div class="content">{!!$post->content!!}</div>
 </div>@endsection

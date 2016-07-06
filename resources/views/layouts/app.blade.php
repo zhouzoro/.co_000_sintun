@@ -5,6 +5,7 @@
             <title>上海信豚实业有限公司</title>
         @show
         <meta charset="utf-8">
+        <meta name="keywords" content="sintun, 信豚, 鱼柳, 巴沙鱼柳, 鸭嘴鱼, 深海鲈鱼, 鱼子酱, caviar, 越南巴沙鱼">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="stylesheet" href="/stylesheets/dist/bootstrap-grid.min.css">
@@ -19,10 +20,10 @@
     </head>
     <body>
         <div class="main-content col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 no-boundry">
+            @include('layouts.header')
             <div class="main">
                 
                 <!--common header-->
-                @include('layouts.header')
                 <div class="crum">
                     @section('crum')
                     @show

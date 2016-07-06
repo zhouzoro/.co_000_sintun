@@ -83,6 +83,7 @@ body.full-screen
 		padding-left: 12px
 	.crum
 		padding-left: 16px
+		padding-top: 4px
 		a
 			padding: 4px 2px
 	#carousel-slide
@@ -157,7 +158,6 @@ body.full-screen
 			.p-intro
 				h2
 					padding: 8px 16px
-					margin-top: 24px
 					margin-bottom: 0px
 					background: $bg-dark
 					color: white
@@ -167,52 +167,53 @@ body.full-screen
 			.product
 				cursor: pointer
 				transition: all 0.3s ease-out
-				padding: 12px
+				padding-right: 12px
 				a.control
 					position: absolute
 					display: none
 				.p-img
-					transition: all 0.3s ease-out
+					transition: width height 0.3s ease-out
 					width: 384px
 					height: 324px
-					margin: 12px
 					img
+						transition: all 0.3s ease-out
 						width: 384px
-						object-fit: cover
-						position: absolute
-						//transition: all 0.3s ease-out
-						display: none
-					img.active
-						transform: translateX(0px)
-						display: inline-block
 		.product-frame:last-child
 			border-bottom: none
 		.product-container.full-screen
 			.product
 				position: fixed
-				width: 100%
+				width: 100vw
 				height: 100vh
 				top: 0px
 				left: 0px
 				background: white
 				z-index: 99
+				padding: 0px
 				a.exit-full-screen.control
 					position: absolute
 					display: inline-block
-					top: 4px
-					left: calc(100% - 36px)
-					color: black
+					top: -6px
+					left: calc(100% - 42px)
+					color: rgba(255,255,255,0.7)
+					padding: 12px
+					border-radius: 0px 0px 0px 36px
+					background: rgba(0,0,0,0.3)
+				a.exit-full-screen.control:hover
+					color: white
 				.p-img
-					width: 564px
-					height: calc(100% - 64px)
-					left: calc(50% - 282px)
-					position: relative
-					background: rgba(0,0,0,0.618)
+					transition: width height 0.3s ease-out
+					width: 100vw
+					height: 100vh
+					left: 0px
+					top: 0px
+					margin: 0px
 					img
-						position: absolute
-						width: 100%
-						height: 100%
-						object-fit: contain
+						transition: all 0.3s ease-out
+						width: auto
+						height: 100vh
+						margin: auto
+						display: block
 
 	form.user-access
 		width: 324px
@@ -256,537 +257,13 @@ body.full-screen
 			right: 0px
 			background: url('/images/qr.jpg')
 			background-size: contain
-			background-repeat: no-repeat	
-/***older                  ****/
-a
-	color: $bg
-	cursor: pointer
+			background-repeat: no-repeat
+.manage-panel
+	form
+		padding: 4px 12px
 
-::selection
-	color: white
-	background: $bg
-
-input::selection
-	color: white
-	background: $bg
-
-
-.container-fluid
-	padding: 0px
-
-.no-boundry
-	padding: 0px
-
-.border-left
-	border-left: $light-border
-.border-top
-	border-top: $light-border
-.cursor-pointer
-	cursor: pointer
-
-.ui.sidebar.left.vertical.menu
-	.logo
-		position: relative
-		height: $nav-height
-		bottom: 0px
-		font-size: 54px
-		font-family: "Matura MT Script Capitals", "Algerian"
-		img
-			top: 0px
-			padding-top: 0px
-			height: $nav-height
-	.menu
-		color: white
-		z-index: 9999
-		.menu-item
-			overflow: hidden
-			opacity: 0.8
-			a.item
-				width: 100%
-				color: $bg
-				display: block
-				padding: 12px 16px 8px 12px
-				font-size: 20px
-				border-bottom: 1px solid gray
-			.sub-menu
-				margin-left: 16px
-				background: white
-				overflow: hidden
-				transition: all 0.5s ease
-				a.item-sub
-					color: $bg
-					display: block
-					padding: 8px 8px 8px 12px
-					border-bottom: 1px solid lightgray
-					font-size: 16px
-				a.item-sub:last-child
-					border-color: transparent
-#nav
-	height: $nav-height
-	width: 100%
-	z-index: 2
-	background: $bg-blur
-	color: white
-	div
-		display: inline-block
-	#sidebar-toggle
-		font-size: 20px
-		cursor: pointer
-		display: none
-	.logo
-		position: relative
-		height: $nav-height
-		bottom: 0px
-		font-size: 54px
-		font-family: "Matura MT Script Capitals", "Algerian"
-		img
-			top: 0px
-			padding-top: 0px
-			height: $nav-height
-	.menu
-		position: absolute
-		top: 44px
-		color: white
-		z-index: 9999
-		.menu-item
-			overflow: hidden
-			opacity: 0.8
-			a.item
-				width: 100%
-				color: black
-				display: block
-				padding: 8px 16px 8px 16px
-				font-size: 20px
-			a.item:hover
-				background: $bg
-				color: white
-			.sub-menu
-				position: absolute
-				background: white
-				top: 36px
-				overflow: hidden
-				height: 0px
-				transition: all 0.5s ease
-				a.item-sub
-					color: $bg
-					display: block
-					margin: 2px 8px 4px 8px
-					padding: 4px 8px 6px 12px
-					border-bottom: 1px solid lightgray
-					font-size: 16px
-				a.item-sub:last-child
-					border-color: transparent
-				a.item-sub:hover
-					background: $bg
-					color: white
-		.menu-item:hover
-			opacity: 1
-			a.item
-				background: $bg
-				color: white
-			.sub-menu
-				height: auto
-				box-shadow: 0px 0px 2px 0px $bg
-	.header-right
+.edit-news
+	.date
 		float: right
-		padding: 24px 12px 0px 12px
-		.login-ops
-			div
-				display: inline-block
-			a
-				display: inline-block
-				padding: 4px
-				border-left: 1px solid lightgray
-			a:first-child
-				border-color: transparent
-			.out-links
-				display: inline-block
-				padding: 2px 8px 2px 8px
-				.out-link
-					color: $bg
-					border: 1px solid
-					width: 32px
-					height: 32px
-					padding-top: 6px
-					padding-left: 8px
-					margin: 2px
-					border-radius: 32px
-					i
-						color: $bg
-	.user-ops
-		.user-button
-			width: 40px
-			height: 40px
-			border-radius: 20px
-			padding: 0px
-			overflow: hidden
-			background: $bg
-			transform: translateY(4px)
-			border: 1px solid $bg
-			transition: all 0.2s ease-out
-			img
-				width: 100%
-				height: 100%
-				object-fit: cover
-		.user-button:hover
-			box-shadow: 0px 0px 8px 2px $bg
-			//transform: scale(1.08)
-		.user-ops-popup
-			width: 160px
-			.popup-content
-				padding: 8px 0px
-				.username
-					font-size: 1.2rem
-					padding: 6px 4px
-				.divider
-					padding: 4px 0px
-					width: 100%
-					a
-						padding: 2px 4px
-						display: block
-
-.card-split
-	background: white
-	margin: 24px 2px 24px 2px
-#search-home
-	position: relative
-	width: 100%
-	top: -144px
-	height: 100px
-	//padding: 0px 329px 0px 329px
-	text-align: center
-	.search-container
-		margin: 4px
-		padding: 24px 24px 24px 24px
-		border-radius: 5px
-		background: rgba(44,44,44,0.6)
-		//border: 1px solid lightgray
-		box-shadow: 0px 0px 12px -6px rgba(199,199,199,0.8)
-		//background: $bg-blur
-		.selections.ui.form
-			.inline.fields
-				.field
-					display: inline-block
-					.ui.radio.checkbox
-						label
-							color: white
-		.search-bar
-			.ui.category.search
-				width: 100%
-			.ui.icon.input
-				width: 100%
-				i
-					cursor: pointer
-		.search-submit
-			display: none
-#carousel-home
-	z-index: 1
-	position: relative
-	margin-bottom: 16px
-	height: $carousel-height
-	width: 100%
-	overflow: hidden
-	.carousel-fade
-		.carousel-inner
-			.item
-				transition-property: opacity
-				transition-duration: 1.5s
-				img
-					width: 100%
-					height: $carousel-height
-					object-fit: cover
-					transition: transform 6.0s ease-in-out
-					transition-delay: 1s
-					transform: scale(1.0)
-				.carousel-caption
-					width: 100%
-					//left: 128px
-					position: absolute
-					top: 24px
-					text-align: left
-					h2
-						a
-							color: white
-							padding: 12px 4px
-							width: 100%
-							cursor: pointer
-						a:hover
-							color: $bg
-			.item:nth-child(2n)
-				img
-					transform: scale(1.1)
-			.item:nth-child(2n).active
-				img
-					transform: scale(1.0)
-			.item.active
-				img
-					transform: scale(1.1)
-			.item,
-			.active.left,
-			.active.right
-				opacity: 0
-				transition-timing-function: ease-in-out
-			.active,
-			.next.left,
-			.prev.right
-				opacity: 1
-			.next,
-			.prev,
-			.active.left,
-			.active.right
-				left: 0
-				transform: translate3d(0, 0, 0)
-	ol#carousel-thumb.carousel-indicators
-		position: absolute
-		right: 0px
-		left: auto
-		top: 0px
-		bottom: 0px
-		width: 224px
-		padding-top: 10px
-		padding-bottom: 12px
-		margin-right: 48px
-		margin-bottom: 0px
-		//overflow: hidden
-		background: rgba(44,44,44,0.6)
-		border: 1px solid lightgray
-		z-index: 2
-		li.thumb
-			display: block
-			position: relative
-			width: 100%
-			height: $carousel-thumb-height
-			padding: 0px
-			margin-bottom: 8px
-			border: none
-			border-radius: 0px
-			box-shadow: 0px 0px 24px -12px rgba(44,44,44,0.6)
-			background: $bg
-			background-size: cover
-			cursor: pointer
-			transition: all 0.2s ease-out
-			img
-				width: 100%
-				height: 100%
-				object-fit: cover
-				position: relative
-				left: auto
-				right: 0px
-		.thumb.active
-			transform: scale(1.05)
-			box-shadow: 0px 0px 8px 0px white
-		.thumb:hover
-			padding: 2px
-			transform: scale(1.1)
-			box-shadow: 0px 0px 16px 0px white
-#content-side
-	padding: 0px
-	.side-poster
-		height: 324px
-		width: 100%
-
-.content-side-right.col-xs-12.col-sm-4.col-md-4.col-lg-4
-	display: none
-
-//==IfoCenter=============================//
-.info-center
-	margin: 24px 0px
-	.title,.title-container,.service-menu,.content-container
-		width: 100%
-		text-align: center
-	.title
-		padding-bottom: 24px
-	.service-menu
-		height: 34px
-		border-bottom: $light-border
-		.item
-			border-top: 2px solid $bg
-			position: relative
-			padding: 10px 16px
-			font-size: 16px
-			color: black
-			cursor: pointer
-		.item:hover
-			background: $bg
-			color: white
-	.info-content-container
-		overflow: hidden
-		height: 221px
-		width: 100%
-		.info-content-list
-			width: 100%
-			.info-content
-				width: 100%
-				padding: 8px
-				.item-container
-					display: inline-block
-					width: 33%
-					padding: 8px
-					a.item
-						height: 189px
-						overflow: hidden
-						.img-container,.title-container
-							width: 100%
-						.img-container
-							height: 189px
-							overflow: hidden
-							img
-								width: 100%
-								height: 100%
-								object-fit: cover
-								transition: all 0.6s ease
-						.title-container
-							height: 34px
-							position: relative
-							top: -34px
-							padding: 4px
-							background: $bg
-							label.title
-								font-size: 20px
-								color: white
-								margin: auto
-					a.item:hover
-						img
-							width: 110%
-							height: 110%
-							transform: translateX(-5%) translateY(-5%)
-						.title-container
-							opacity: 0.6
-
-#report
-	border: $light-border
-	overflow: hidden
-
-	.report-poster
-		height: 289px
-		overflow: hidden
-		padding-bottom: 8px
-		div:first-child
-			padding: 0px
-		.poster-img
-			display: inline-block
-			position: relative
-			top: 4px
-			padding: 12px 0px 4px 0px
-			width: 100%
-			overflow: hidden
-			img
-				width: 100%
-				height: 248px
-				object-fit: cover
-		.intro
-			padding-left: 5%
-			width: 100%
-			display: inline-block
-			position: relative
-			top: 4px
-	.report-compo
-		padding: 8px
-		.item
-			padding: 4px
-			border-bottom: $light-border
-			height: 108px
-			.img-container
-				width: 33%
-				height: 1px
-				display: inline-block
-				img
-					width: 100%
-					height: 100px
-					object-fit: cover
-			.title
-				margin-left: 5%
-				width: 60%
-				height: 1px
-				display: inline-block
-	.report-compo.report-intro
-		.report-container-mini
-			height: 216px
-			overflow: hidden
-			border: $light-border
-			.report-intro-list
-				transition: all 0.6s ease
-		a.report-intro-list-nav
-			padding: 1px 12px
-			height: 24px
-			text-align: center
-			background: $bg
-			color: white
-			border: 1px solid
-			cursor: pointer
-			i
-				font-size: 16px
-		a.report-intro-list-nav:hover
-			background: white
-			color: $bg
-
-#articles-container
-	padding-left: 6px
-	margin-left: 8px
-	margin-top: 8px
-	border-left: $light-border
-	.articles-menu
-		padding: 8px 0px 4px 0px
-		border-bottom: $light-border
-		height: 54px
-		a.item
-			font-size: 16px
-			display: inline-block
-			padding: 12px 16px 8px 12px
-			color: $bg
-		a.item:hover
-			opacity: 0.7
-		.new-article
-			float: right
-			font-size: 16px
-			padding-top: 4px
-.article-cover
-	width: 100%
-	height: 256px
-	overflow: hidden
-	img
-		width: 100%
-		height: 100%
-		object-fit: cover
-
-#articles-list
-	.article-preview
-		width: 100%
-		margin: 8px 0px 0px 4px
-		padding: 8px 0px 4px 0px
-		border-bottom: 1px solid lightgray
-		.article-title
-			padding-bottom: 8px
-		.article-author
-			a.user-link
-				img.user-pic
-					width: 32px
-					height: 32px
-					border-radius: 16px
-					object-fit: cover
-					background: $bg
-				span
-					padding: 0px 4px
-		.article-tags
-			display: none
-			a
-				padding-right: 16px
-		.article-description
-			p
-				font-style: italic
-		.article-meta
-			padding-top: 8px
-			div
-				display: inline-block
-			a
-				padding: 2px 16px 8px 2px
-				i
-					padding: 2px
-	.article-preview.style1
-	.article-preview.style2
-		.cover-contaner
-			padding: 0px
-			.article-cover
-				height: 196px
-		//.txt-container
-			padding: 24px 12px
+	.edit-news-btns
+		display: inline-block

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use Log;
+
 class UploadController extends Controller
 {
     public function getIndex(){
@@ -17,6 +19,7 @@ class UploadController extends Controller
 	public function postImg(Request $request){
 		$file = $request->file('file') ? $request->file('file') : $request->file('image');
 		$location =  self::saveFile($file,'images');
+		Log::info($location);
 		return response()->json(['location' => $location]);
 	}
 	public function saveFile($file, $ftype){

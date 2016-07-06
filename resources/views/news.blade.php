@@ -2,12 +2,10 @@
 @extends('layouts.app')
 
 @section('page-title')
-<title>信豚动态——上海信豚实业有限公司</title>
+<title>{{$req->lang=="en" ? 'News at SINTUN' : '信豚动态——上海信豚实业有限公司'}}</title>
 @endsection
 
-@section('crum')
-<a href="/">首页</a><i class="icon angle double right"></i><a href="#">信豚动态</a>
-@endsection
+@section('crum')<a href="{{$req->lang=="en" ? '/en' : '/'}}">{{$req->lang=="en" ? 'Home' : '首页'}}</a><i class="icon angle double right"></i><a href="#">{{$req->lang=="en" ? 'News' : '信豚动态'}}</a>@endsection
 
 @section('main')
 @parent

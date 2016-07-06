@@ -1,85 +1,95 @@
 $(document).ready(() => {
     $('.ui.accordion').accordion();
     $('.ui.menu .item').tab();
-    initMce('#input-body');
-    $('a.item.edit-page').click(function() {
-        initMce('#mce-input' + $(this).data('tab'));
-    })
-    $('#btn-img').click(function() {
-        var tempImgInput = $('<input>').attr({
-            'type': 'file',
-            'class': 'temp-input'
-        }).css({
-            'display': 'none',
-            'position': 'absolute'
-        }).change(function() {
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    tinymce.activeEditor.execCommand('insertHTML', false, '<img class="inline-img" src="' + e.target.result + '" width="100%" >');
-
-                    tinymce.activeEditor.uploadImages();
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-
-            $('.temp-input').remove();
-        });
-        $('body').append(tempImgInput);
-        tempImgInput.click();
-
-    });
-    var editPages = [{}, {}, {}, { title: '关于信豚', name: 'about' }, { title: '商业合作', name: 'cooperation' }, { title: '招贤纳士', name: 'career' }, { title: '联系我们', name: 'contact' }]
-        ///////geonames
-    function showNames() {
-        var _this = this;
-        var resList = $(_this).next('.result');
-        $.get('http://api.geonames.org/searchJSON?lang=ZH&username=zhouzoro&maxRows=10&q=' + $(_this).val(), function(res) {
-            resList.empty();
-            if (res.geonames.length === 0) {
-                resList.append('No Results Found');
-            }
-            for (let geoname of res.geonames) {
-                var listItem = $('<li>').attr('class', 'geoname-resultlist-item');
-                var listLink = $('<a>').attr('data-id', geoname.geonameId).append($('<span>').attr('class', 'name').text(geoname.name)).append($('<span>').attr('class', 'toponymName').text('(' + geoname.toponymName + ')'));
-                if (geoname.countryName && geoname.countryName !== '') {
-                    listLink.append($('<span>').attr('class', 'countryName').text(', ' + geoname.countryName)).append($('<span>').attr('class', 'toponymName').text('(' + geoname.toponymName + ')'));
-                }
-                resList.append(listItem.append(listLink));
-            }
-        })
-
-    }
-    $('.geosearch').keyup(showNames).change(showNames);
 });
 
+function uploadImg(editorId) {
+    var tempImgInput = $('<input>').attr({
+        'type': 'file',
+        'class': 'temp-input'
+    }).css({
+        'display': 'none',
+        'position': 'absolute'
+    }).change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                tinymce.get(editorId).insertContent('<img class="inline-img" src="' + e.target.result + '" width="100%" >');
+
+                tinymce.get(editorId).uploadImages();
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+
+        $('.temp-input').remove();
+    });
+    $('body').append(tempImgInput);
+    tempImgInput.click();
+}
+
 function login() {
+    var form = $('form#login');
+    var xhr = new XMLHttpRequest();
+    xhr.open(form.attr('method'), form.attr('action'));
 
+    xhr.onload = function() {
+        var res = JSON.parse(xhr.responseText);
+        if (res.status == '504') {
+            showTipMsg('登录失败: ' + res.msg, 0);
+        } else {
+            showTipMsg('登录成功: ' + res.msg, 1);
+            $('.main').find('.login-page').hide();
+            $('.main').append(res.html);
 
-    var formData = new FormData($('form#login')[0]);
+            $('.ui.accordion').accordion();
+            $('.ui.menu .item').tab();
+            $('.frm-body .input-body').each(function() {
+                initMce('#' + $(this).attr('id'));
+            })
+        }
+    };
+    var formData = new FormData(form[0]);
     xhr.send(formData);
 }
 
-function updatePage(el) {
-    var $form = $($(el).data('form'));
+function updatePage(formSelector) {
+    var $form = $(formSelector);
     tinymce.activeEditor.uploadImages(function(success) {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/cruiser_reports');
+        xhr.open('POST', '/pages');
 
         xhr.onload = function() {
             var res = JSON.parse(xhr.responseText);
             if (res.status == '200') {
-                showTipMsg('更新'+$form.find('input[name=type]')+'成功',1);
+                window.location = res.url;
             } else if (res.status == '504') {
                 showTipMsg('更新失败: ' + res.msg, 0);
             }
         };
 
         var contentHtml = tinymce.activeEditor.save();
+        $form.find('input[name=content]').val(contentHtml);
         var formData = new FormData($form[0]);
-        formData.append('html', contentHtml);
+        console.log(contentHtml);
         xhr.send(formData);
     });
+}
+
+function updatePass() {
+    var $form = $('#frm-secu');
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/update_pass');
+
+    xhr.onload = function() {
+        var res = JSON.parse(xhr.responseText);
+        if (res.status == '200') {
+            window.location = res.url;
+        } else if (res.status == '504') {
+            showTipMsg('更新失败: ' + res.msg, 0);
+        }
+    };
+    var formData = new FormData($form[0]);
+    xhr.send(formData);
 }
 
 function uploadPost(formSelector) {
@@ -103,6 +113,29 @@ function uploadPost(formSelector) {
         var formData = new FormData($form[0]);
         xhr.send(formData);
     });
+}
+
+function deleteNews(nid) {
+    var $item = $('#it' + nid);
+    $item.find('*').hide();
+    $item.append('<a class="revoke-delete button ui basic gray small" onclick="undoDelete(' + nid + ')"><i class="fa fa-undo"></i>取消</a><span class="revoke-delete date">已删除</span>');
+    window.setTimeout(function() {
+        if ($item.find(".revoke-delete")[0]) {
+            $item.remove();
+            var form = $('form#login');
+            var xhr = new XMLHttpRequest();
+            xhr.open(form.attr('method'), '/delete_news/' + nid);
+
+            var formData = new FormData(form[0]);
+            xhr.send(formData);
+        }
+    }, 4000)
+}
+
+function undoDelete(nid) {
+    var $item = $('#it' + nid);
+    $item.find(".revoke-delete").remove();
+    $item.find('*').show();
 }
 
 function updatePost(formId) {
@@ -129,6 +162,15 @@ function updatePost(formId) {
     });
 }
 
+function showTipMsg(txt, isok) {
+    var color = isok ? 'green' : 'red';
+    $('p.tip-message').text(txt).css({
+        'background': isok ? 'rgba(55,222,88,0.3)' : 'rgba(222,55,88,0.3)',
+        'color': color,
+        'border': '1px solid ' + color
+    });
+}
+
 function initMce(selector, docId) {
     var inline = docId ? true : false;
     tinymce.init({
@@ -139,21 +181,6 @@ function initMce(selector, docId) {
         body_class: 'travelogue',
         //inline: inline,
         plugins: ["autoresize", "advlist", "autolink", "lists", "link", "image", "charmap", "print", "preview", "anchor", "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table", "paste", "imagetools"],
-        // plugins: 'table autoresize paste image imagetools preview',
-        /*style_formats: [{ title: 'H1', block: 'h1' }, { title: 'H2', block: 'h2' }, { title: 'H3', block: 'h3' }, { title: 'Bold text', inline: 'strong' }, { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } }, { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } }, { title: 'Badge', inline: 'span', styles: { display: 'inline-block', border: '1px solid #2276d2', 'border-radius': '5px', padding: '2px 5px', margin: '0 2px', color: '#2276d2' } }, { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }],
-        formats: {
-            alignleft: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'left' },
-            aligncenter: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'center' },
-            alignright: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'right' },
-            alignfull: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', classes: 'full' },
-            bold: { inline: 'span', 'classes': 'bold' },
-            italic: { inline: 'span', 'classes': 'italic' },
-            underline: { inline: 'span', 'classes': 'underline', exact: true },
-            strikethrough: { inline: 'del' },
-            customformat: { inline: 'span', styles: { color: '#00ff00', fontSize: '20px' }, attributes: { title: 'My custom format' }, classes: 'example1' }
-        },*/
-        //content_css: '/stylesheets/person.min.css',
-        //plugins: "advlist lists link anchor contextmenu paste image autoresize preview imagetools lists",
         toolbar: 'undo redo styleselect fontsizeselect bold italic underline alignleft aligncenter alignright alignfull advlist lists link',
         image_caption: true,
         paste_data_images: true,
@@ -162,6 +189,7 @@ function initMce(selector, docId) {
         //plugins: "contextmenu",
         //contextmenu: "formatselect bold italic link image inserttable | cell row column deletetable",
         menubar: false,
+        relative_urls: false,
         images_upload_url: '/upload/images',
         statusbar: false,
         min_height: 480,

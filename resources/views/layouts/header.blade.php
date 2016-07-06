@@ -1,6 +1,6 @@
 <header>
     <div class="header-part logo-container no-boundry">
-        <a class="logo" href='{{$req->lang=="en" ? "/" : "/en"}}'>
+        <a class="logo" href='{{$req->lang=="en" ? "/en" : "/"}}'>
             <img src="/sintun.png">
         </a>
         <a class="switch-lang" href='{{$req->lang=="en" ? "/".$req->path() : "/en/".$req->path()}}'>
