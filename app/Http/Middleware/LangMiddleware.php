@@ -26,6 +26,9 @@ class LangMiddleware
             $request->merge([
                 'lang' => 'zh'
             ]);
+            if($segment=='zh'){
+                $request->server->set('REQUEST_URI',str_replace($segment,'',$dupRequest->path()));
+            }
         };
         $response = $next($request);
         return $response;

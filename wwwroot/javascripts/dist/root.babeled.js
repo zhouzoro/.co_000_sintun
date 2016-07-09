@@ -1,10 +1,5 @@
 'use strict';
 
-$(document).ready(function () {
-    $('.ui.accordion').accordion();
-    $('.ui.menu .item').tab();
-});
-
 function uploadImg(editorId) {
     var tempImgInput = $('<input>').attr({
         'type': 'file',
@@ -19,8 +14,10 @@ function uploadImg(editorId) {
                 tinymce.get(editorId).insertContent('<img class="inline-img" src="' + e.target.result + '" width="100%" >');
 
                 tinymce.get(editorId).uploadImages();
+                $('.loader').removeClass('loading');
             };
             reader.readAsDataURL(this.files[0]);
+            $('.loader').addClass('loading');
         }
 
         $('.temp-input').remove();
@@ -30,17 +27,20 @@ function uploadImg(editorId) {
 }
 
 function login() {
+    $('.loader').addClass('loading');
     var form = $('form#login');
     var xhr = new XMLHttpRequest();
     xhr.open(form.attr('method'), form.attr('action'));
 
     xhr.onload = function () {
+        $('.loader').removeClass('loading');
         var res = JSON.parse(xhr.responseText);
         if (res.status == '504') {
             showTipMsg('登录失败: ' + res.msg, 0);
         } else {
             showTipMsg('登录成功: ' + res.msg, 1);
             $('.main').find('.login-page').hide();
+            $('.main').find('#control-panel').remove();
             $('.main').append(res.html);
 
             $('.ui.accordion').accordion();
@@ -48,6 +48,11 @@ function login() {
             $('.frm-body .input-body').each(function () {
                 initMce('#' + $(this).attr('id'));
             });
+            $(window).scroll(function () {
+                showScrollTop();
+                changeToolBarPosition();
+            });
+            $(window).resize(changeToolBarPosition);
         }
     };
     var formData = new FormData(form[0]);
@@ -55,30 +60,12 @@ function login() {
 }
 
 function updatePage(formSelector) {
-    var $form = $(formSelector);
-    tinymce.activeEditor.uploadImages(function (success) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/pages');
-
-        xhr.onload = function () {
-            var res = JSON.parse(xhr.responseText);
-            if (res.status == '200') {
-                window.location = res.url;
-            } else if (res.status == '504') {
-                showTipMsg('更新失败: ' + res.msg, 0);
-            }
-        };
-
-        var contentHtml = tinymce.activeEditor.save();
-        $form.find('input[name=content]').val(contentHtml);
-        var formData = new FormData($form[0]);
-        console.log(contentHtml);
-        xhr.send(formData);
-    });
+    uploadPost(formSelector);
 }
 
 function updatePass() {
-    var $form = $('#frm-secu');
+    $('.loader').addClass('loading');
+    var form = $('#frm-secu');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/update_pass');
 
@@ -87,81 +74,221 @@ function updatePass() {
         if (res.status == '200') {
             window.location = res.url;
         } else if (res.status == '504') {
-            showTipMsg('更新失败: ' + res.msg, 0);
+            $('.loader').removeClass('loading');
+            showTipMsg('更新密码失败: ' + res.msg, 0);
         }
     };
-    var formData = new FormData($form[0]);
+    var formData = new FormData(form[0]);
     xhr.send(formData);
 }
 
+function replaceImg(el) {
+    var btn = $(el);
+    var ops = btn.parent('.ops');
+    var img = ops.prev('img');
+    var tempImgInput = $('<input>').attr({
+        'type': 'file',
+        'class': 'temp-input'
+    }).css({
+        'display': 'none',
+        'position': 'absolute'
+    }).change(function () {
+        $('.loader').addClass('loading');
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.attr('src', e.target.result);
+                if (btn.data('name') == "hb.jpg") {
+                    $('header').css('background', 'url("/images/default-bg.jpg")');
+                    $('header').css({
+                        'background': 'url("' + e.target.result + '")',
+                        'background-size': 'cover'
+                    });
+                }
+            };
+            reader.readAsDataURL(this.files[0]);
+
+            var fileUploadReq = new XMLHttpRequest();
+            fileUploadReq.withCredentials = false;
+            fileUploadReq.open('POST', btn.data('url'));
+
+            fileUploadReq.onload = function () {
+                $('.loader').removeClass('loading');
+                tempImgInput.remove();
+            };
+
+            var formData = new FormData();
+            formData.append('image', this.files[0], this.files[0].name);
+            formData.append('fname', btn.data('name'));
+            formData.append('name', $('input[name=name]').val());
+            formData.append('password', $('input[name=password]').val());
+            fileUploadReq.send(formData);
+        }
+    });
+    $('body').append(tempImgInput);
+    tempImgInput.click();
+}
+
+function deleteImg(el) {
+    $('.loader').addClass('loading');
+    var btn = $(el);
+    deleteWithId(btn.data(url));
+    btn.parent('.img-container').remove();
+}
+
+function deleteWithId(url) {
+
+    var form = $('form#login');
+    var xhr = new XMLHttpRequest();
+    xhr.open(form.attr('method'), url);
+
+    var formData = new FormData(form[0]);
+    xhr.send(formData);
+}
+
+function uploadPi(el) {
+    var btn = $(el);
+    var tempImgInput = $('<input>').attr({
+        'type': 'file',
+        'class': 'temp-input'
+    }).css({
+        'display': 'none',
+        'position': 'absolute'
+    }).change(function () {
+        $('.loader').addClass('loading');
+        if (this.files && this.files[0]) {
+
+            var fileUploadReq = new XMLHttpRequest();
+            fileUploadReq.withCredentials = false;
+            fileUploadReq.open('POST', '/upload/images/products/' + btn.data('pid'));
+
+            fileUploadReq.onload = function () {
+                var json = JSON.parse(fileUploadReq.responseText);
+                var newImgContainer = $('<div>').attr('class', 'col-xs-3 col-sm-3 col-md-3 col-lg-3 img-container');
+                var img = $('<div>').attr('class', 'img').append($('<img>').attr('src', '/images/products/' + json.pid + '/' + json.fname));
+                var ops = $('<div>').attr('class', 'ops').append($('<a>').attr({
+                    "class": "red",
+                    "href": "#",
+                    "data-name": json.fname,
+                    "data-id": json.id,
+                    "data-url": "/delete_imgs/" + json.id,
+                    "onclick": "deleteImg(this)"
+                }).text('删除')).append($('<a>').attr({
+                    "href": "#",
+                    "data-name": json.fname,
+                    "data-url": "/upload/images/products/" + json.pid,
+                    "onclick": "replaceImg(this)"
+                }).text('替换')).append($('<a>').attr({
+                    "href": '/images/products/' + json.pid + '/' + json.fname,
+                    "download": json.fname
+                }).text('下载'));
+                $('.rearange.ps').append(newImgContainer.append(img.append(ops)));
+                $('.loader').removeClass('loading');
+                tempImgInput.remove();
+            };
+
+            var formData = new FormData();
+            formData.append('image', this.files[0], this.files[0].name);
+            formData.append('name', $('input[name=name]').val());
+            formData.append('password', $('input[name=password]').val());
+            fileUploadReq.send(formData);
+        }
+    });
+    $('body').append(tempImgInput);
+    tempImgInput.click();
+}
+
 function uploadPost(formSelector) {
-    var $form = $(formSelector);
+    $('.loader').addClass('loading');
+    var form = $(formSelector);
 
     tinymce.activeEditor.uploadImages(function (success) {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/news');
+        xhr.open(form.attr('method'), form.attr('action'));
 
         xhr.onload = function () {
             var res = JSON.parse(xhr.responseText);
             if (res.status == '200') {
-                window.location = res.url;
+                if (formSelector === '#frm-product') {
+                    $('a.item.pimg-tab').click();
+                    $('.loader').removeClass('loading');
+                } else {
+                    window.location = res.url;
+                }
             } else if (res.status == '504') {
+                $('.loader').removeClass('loading');
                 showTipMsg('上传失败: ' + res.msg, 0);
             }
         };
 
         var contentHtml = tinymce.activeEditor.save();
-        $form.find('input[name=content]').val(contentHtml);
-        var formData = new FormData($form[0]);
+        form.find('input[name=content]').val(contentHtml);
+        var formData = new FormData(form[0]);
         xhr.send(formData);
     });
+}
+
+function openInNewTab(url) {
+    console.log(1);
+    var $a = $('<a>').attr({
+        'href': url,
+        'class': 'hidden',
+        'target': '__blank'
+    });
+    $('body').append($a);
+    $a.click();
 }
 
 function deleteNews(nid) {
     var $item = $('#it' + nid);
     $item.find('*').hide();
-    $item.append('<a class="revoke-delete button ui basic gray small" onclick="undoDelete(' + nid + ')"><i class="fa fa-undo"></i>取消</a><span class="revoke-delete date">已删除</span>');
+    var $a = $('<a>').attr({
+        'class': 'revoke-delete',
+        'onclick': 'undoDelete("#it' + nid + '")'
+    }).append($('<i>').attr('class', 'fa fa-undo')).append('<span>取消</span>');
+    $item.append($a).append('<span class="revoke-delete date">已删除</span>');
     window.setTimeout(function () {
         if ($item.find(".revoke-delete")[0]) {
             $item.remove();
-            var form = $('form#login');
-            var xhr = new XMLHttpRequest();
-            xhr.open(form.attr('method'), '/delete_news/' + nid);
-
-            var formData = new FormData(form[0]);
-            xhr.send(formData);
+            deleteWithId('/delete_news/' + nid);
         }
-    }, 4000);
+    }, 2400);
 }
 
-function undoDelete(nid) {
-    var $item = $('#it' + nid);
+function deleteProducts(pid) {
+    var $item = $('#pit' + pid);
+    $item.find('*').hide();
+    var $a = $('<a>').attr({
+        'class': 'revoke-delete',
+        'onclick': 'undoDelete("#pit' + pid + '")'
+    }).append($('<i>').attr('class', 'fa fa-undo')).append('<span>取消</span>');
+
+    $item.append($a).append('<span class="revoke-delete date">已删除</span>');
+    window.setTimeout(function () {
+        if ($item.find(".revoke-delete")[0]) {
+            $item.remove();
+            deleteWithId('/delete_products/' + pid);
+        }
+    }, 2400);
+}
+
+function loadToT(url) {
+    $('.loader').addClass('loading');
+    $.get(url, function (res) {
+        $('.ui.tab.active').removeClass('active');
+        $('.ui.tab.temp').html(res).addClass('active');
+        $('.ui.tab.temp').find('form').each(function () {
+            var form = $(this);
+            var mce = form.find('.input-body');
+            initMce('#' + mce.attr('id'));
+        });
+    });
+}
+
+function undoDelete(item) {
+    var $item = $(item);
     $item.find(".revoke-delete").remove();
     $item.find('*').show();
-}
-
-function updatePost(formId) {
-    tinymce.activeEditor.uploadImages(function (success) {
-        var form = $(formId);
-        var xhr = new XMLHttpRequest();
-        xhr.open(form.attr('method'), form.attr('action'));
-
-        xhr.onload = function () {
-            console.log(xhr.responseText);
-            var res = JSON.parse(xhr.responseText);
-            if (res.status == '200') {
-                window.location = res.url;
-            } else if (res.status == '504') {
-                showTipMsg('上传失败: ' + res.msg, 0);
-            }
-        };
-        var contentHtml = tinymce.activeEditor.save();
-        $('input[name=content]').val(contentHtml);
-        var formData = new FormData(form[0]);
-        formData.append('username', Cookies.get('username'));
-        formData.append('email', Cookies.get('email'));
-        xhr.send(formData);
-    });
 }
 
 function showTipMsg(txt, isok) {
@@ -173,15 +300,16 @@ function showTipMsg(txt, isok) {
     });
 }
 
-function initMce(selector, docId) {
-    var inline = docId ? true : false;
+function initMce(selector) {
+    $('.loader').addClass('loading');
+    var imgurl = $(selector).data('imgurl');
+    if (!imgurl) imgurl = '/upload/images';
     tinymce.init({
         selector: selector,
         skin: 'mxc1',
         language: 'zh_CN',
         content_css: '/stylesheets/dist/travelogue.min.css',
         body_class: 'travelogue',
-        //inline: inline,
         plugins: ["autoresize", "advlist", "autolink", "lists", "link", "image", "charmap", "print", "preview", "anchor", "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table", "paste", "imagetools"],
         toolbar: 'undo redo styleselect fontsizeselect bold italic underline alignleft aligncenter alignright alignfull advlist lists link',
         image_caption: true,
@@ -192,7 +320,7 @@ function initMce(selector, docId) {
         //contextmenu: "formatselect bold italic link image inserttable | cell row column deletetable",
         menubar: false,
         relative_urls: false,
-        images_upload_url: '/upload/images',
+        images_upload_url: imgurl,
         statusbar: false,
         min_height: 480,
         max_height: 640,
@@ -203,39 +331,21 @@ function initMce(selector, docId) {
                 $('input[name=content]').val(contentHtml).change();
             });
             ed.on('init', function (e) {
-
-                if ($('input[name=content]').val()) {
-                    tinymce.activeEditor.setContent($('input[name=content]').val());
-                }
-
-                if ($('input[name=cover]').val()) {
-                    $('.post-hero').css({ 'background': 'url("http://' + window.location.host + $('input[name=cover]').val() + '")', 'background-size': 'cover' });
-                }
-                if (!window.location.host.lastIndexOf('edit')) {}
+                $('.loader').removeClass('loading');
             });
         }
     });
 }
 
-$('.add-btn').click(function () {
-    var transloader = $('<div>').attr('class', 'expand-transition');
-    $(this).append(transloader);
-    var targetUrl = $(this).data('url');
-    var uploadType = $(this).data('type');
-    $.get(targetUrl, function (res) {
-        $('#modal-cust').find('.container').html(res);
-        $('#btn-cancel').click(function () {
-            $('#body').show();
-            $('#modal-cust').hide('fast');
-            $('#modal-cust').find('.container').html('');
-        });
-        $('#modal-cust').show('slow');
-        $('#body').hide('slow');
-        initUploadOf(uploadType);
-        transloader.remove();
-        $('#edit-pic').click(uploadPic);
+function newProduct() {
+    $.get('/new_product', function (res) {
+        var modal = $('.cust-modal');
+        modal.html(res.html);
+        $('.menu.tab-product .item').tab();
+        initMce('#mce-product');
+        modal.removeClass('out');
     });
-});
+}
 
 function uploadPic() {
     var img = $(this).next('img');
@@ -282,14 +392,45 @@ function uploadPic() {
     tempImgInput.click();
 }
 
-function computProgress(oEvent) {
-    var percentComplete = Math.ceil(1000 * oEvent.loaded / oEvent.total) / 10 + '%';
-    return percentComplete;
+function checkVisible(elm, evalType) {
+    evalType = evalType || 'visible';
+
+    var vpH = $(window).height();
+    // Viewport Height
+    var st = $(window).scrollTop();
+
+    // Scroll Top
+    var y = $(elm).offset().top;
+    var elementHeight = $(elm).height();
+
+    if (evalType === 'visible') return y < vpH + st && y > st - elementHeight;
+    if (evalType === 'above') return y < vpH + st;
 }
 
-function GetCurrentDate() {
-    var cdate = new Date();
-    var month = cdate.getMonth() < 9 ? '0' + (cdate.getMonth() + 1) : cdate.getMonth() + 1;
-    var currentDate = cdate.getFullYear() + "-" + month + "-" + cdate.getDate();
-    return currentDate;
+function showScrollTop() {
+    if (!checkVisible($('#top-indicator'))) {
+        $('#scroll-top').removeClass("out").addClass("in");
+    } else {
+        $('#scroll-top').removeClass("in").addClass("out");
+    }
+}
+
+function changeToolBarPosition() {
+    $('.bottom-indicator').each(function () {
+        var indi = $(this);
+        var ops = $(this).prev('.ops');
+        if (!checkVisible(indi)) {
+            ops.addClass('sticky');
+        } else {
+
+            ops.removeClass('sticky');
+        }
+    });
+}
+
+function ScrollTop() {
+    var body = $("html, body");
+    body.stop().animate({
+        scrollTop: 0
+    }, '400');
 }

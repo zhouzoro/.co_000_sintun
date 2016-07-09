@@ -23,8 +23,6 @@ Route::get('/upload/files',function(){
         return view('upload_test');
     });
 
-//Route::resource('cruiser_report','CruiserReportController');
-
 //==pages=====================//
 Route::get('/', function (Request $request) {
 	/*$articles = DB::table('news')
@@ -38,27 +36,23 @@ Route::get('/', function (Request $request) {
 
 
 Route::get('/about', function (Request $request) {
-    $content = DB::table('pages')->where('name','about')->where('lang', 'zh')->get()[0]->content;
+    $content = DB::table('pages')->where('name','about')->where('lang', $request->lang)->get()[0]->content;
     return view('about',['req' => $request, 'content' => $content]);
-});
-
-Route::get('/products', function (Request $request) {
-    return view('products',['req' => $request]);
 });
 
 Route::get('/career', function (Request $request) {
 
-    $content = DB::table('pages')->where('name','career')->where('lang', 'zh')->get()[0]->content;
+    $content = DB::table('pages')->where('name','career')->where('lang', $request->lang)->get()[0]->content;
     return view('career',['req' => $request, 'content' => $content]);
 });
 Route::get('/collaboration', function (Request $request) {
 
-    $content = DB::table('pages')->where('name','collaboration')->where('lang', 'zh')->get()[0]->content;
+    $content = DB::table('pages')->where('name','collaboration')->where('lang', $request->lang)->get()[0]->content;
     return view('collaboration',['req' => $request, 'content' => $content]);
 });
 Route::get('/contact', function (Request $request) {
 
-    $content = DB::table('pages')->where('name','contact')->where('lang', 'zh')->get()[0]->content;
+    $content = DB::table('pages')->where('name','contact')->where('lang', $request->lang)->get()[0]->content;
     return view('contact',['req' => $request, 'content' => $content]);
 });
 
@@ -73,28 +67,9 @@ Route::get('/home', function () {
 Route::get('/root',function(Request $request){
     	return view('layouts.loginPage',['req' => $request]);
     });
-Route::get('/test',function(Request $request){
-        $articles = App\News::select('*')
-                        ->orderBy('updated_at', 'desc')
-                        ->skip(0)
-                        ->take(12)
-                        ->get();
-        $about = DB::table('pages')->where('name','about')->where('lang', 'zh')->get()[0]->content;
-        $career = DB::table('pages')->where('name','career')->where('lang', 'zh')->get()[0]->content;
-        $collaboration = DB::table('pages')->where('name','collaboration')->where('lang', 'zh')->get()[0]->content;
-        $contact = DB::table('pages')->where('name','contact')->where('lang', 'zh')->get()[0]->content;
-    	return view('root',['req' => $request,'about' => $about,'career' => $career,'collaboration' => $collaboration,'contact' => $contact,'articles'=>$articles]);
-    });
 
 Route::post('/root','UserController@login');
 
-Route::post('/delete_news/{id}',function($id, Request $request){
-
-        $admin = DB::table('admins')->where('name', $request->name)->where('password', $request->password)->count();
-        if($admin==1){
-            $dead = App\News::where('id', $id)->delete();
-        }
-    });
 
 Route::post('/update_pass',function(Request $request){
 
@@ -121,31 +96,147 @@ Route::post('/login',function(Request $request){
         if($admin==1){
             $articles = App\News::select('*')
                             ->orderBy('updated_at', 'desc')
-                            ->skip(0)
-                            ->take(12)
                             ->get();
-            $about = DB::table('pages')->where('name','about')->where('lang', 'zh')->get()[0]->content;
-            $career = DB::table('pages')->where('name','career')->where('lang', 'zh')->get()[0]->content;
-            $collaboration = DB::table('pages')->where('name','collaboration')->where('lang', 'zh')->get()[0]->content;
-            $contact = DB::table('pages')->where('name','contact')->where('lang', 'zh')->get()[0]->content;
 
-            $view = View::make('root',['req' => $request,'about' => $about,'career' => $career,'collaboration' => $collaboration,'contact' => $contact,'articles'=>$articles])->render();
+            $ps = App\Products::select('*')
+                            ->orderBy('id')
+                            ->get();
+            $about = DB::table('pages')->where('name','about')->where('lang', $request->lang)->get()[0]->content;
+            $career = DB::table('pages')->where('name','career')->where('lang', $request->lang)->get()[0]->content;
+            $collaboration = DB::table('pages')->where('name','collaboration')->where('lang', $request->lang)->get()[0]->content;
+            $contact = DB::table('pages')->where('name','contact')->where('lang', $request->lang)->get()[0]->content;
+            //add new temp post to get next column id
+            $tempNews = New App\News;
+            $tempNews->author = ' ';
+            $tempNews->title = ' ';
+            $tempNews->content = ' ';
+            $tempNews->save();
+            $newId = $tempNews->id;
+            //check if previous id is used, if not, delete related directory
+            $prevId = $newId - 1;
+            $prevExsits = App\News::where('id',$prevId)->count();
+            if($prevExsits != 1){
+                File::deleteDirectory(base_path('wwwroot/images/news/'.$prevId));
+            }
+            //make new directory
+            File::makeDirectory(base_path('wwwroot/images/news/'.$newId));
+            //delete temp post, but id is taken to render view
+            $tempNews->delete();
 
+            $tempProducts = New App\Products;
+            $tempProducts->name = ' ';
+            $tempProducts->description = ' ';
+            $tempProducts->save();
+            $pId = $tempProducts->id;
+            //check if previous id is used, if not, delete related directory
+            $prevpId = $pId - 1;
+            $prevExsits = App\Products::where('id',$prevpId)->count();
+            if($prevExsits != 1){
+                File::deleteDirectory(base_path('wwwroot/images/products/'.$prevpId));
+            }
+            //make new directory
+            File::makeDirectory(base_path('wwwroot/images/products/'.$pId));
+            $tempProducts->delete();
+
+
+            $view = View::make('root',['req' => $request,'about' => $about,'career' => $career,'collaboration' => $collaboration,'contact' => $contact,'articles'=>$articles, 'newId'=>$newId, 'pId'=>$pId,'ps'=> $ps])->render();
             return response()->json(['status' => '200','msg' => 'Access Granted','html' => $view]);
         }else{
             return response()->json(['status' => '504','msg' => 'Admin Authentication Failed']);
         }
     });
-
+Route::get('/new_product',function(Request $request){
+    $tempProducts = New App\Products;
+    $tempProducts->name = ' ';
+    $tempProducts->description = ' ';
+    $tempProducts->save();
+    $newId = $tempProducts->id;
+    //check if previous id is used, if not, delete related directory
+    $prevId = $newId - 1;
+    $prevExsits = App\Products::where('id',$prevId)->count();
+    Log::info( $prevExsits);
+    Log::info( $newId);
+    Log::info( $prevId);
+    if($prevExsits != 1){
+        File::deleteDirectory(base_path('wwwroot/images/Products/'.$prevId));
+    }
+    //make new directory
+    File::makeDirectory(base_path('wwwroot/images/Products/'.$newId));
+    //delete temp post, but id is taken to render view
+    $tempProducts->delete();
+    $view = View::make('newProduct',['req' => $request, 'newId'=>$newId])->render();
+    return response()->json(['status' => '200','msg' => 'Access Granted','html' => $view]);
+});
 Route::post('/upload/images','UploadController@postImg');
 
+Route::post('/upload/images/news/{id}','UploadController@newsImg');
+
+Route::post('/upload/images/carousel/','UploadController@carouselImg');
+Route::post('/upload/images/poster','UploadController@posterImg');
+
+Route::post('/upload/images/header','UploadController@headerImg');
+Route::post('/upload/images/products/{id}','UploadController@pImg');
+
+Route::post('/delete_imgs/{id}',function($id, Request $request){
+
+        $admin = DB::table('admins')->where('name', $request->name)->where('password', $request->password)->count();
+        if($admin==1){
+            $dead = App\Pimgs::where('id', $id)->delete();
+            File::delete(base_path('wwwroot/images/products/'.$id.'/'.$request->fname));
+        }
+    });
+
+Route::get('/pimgs/{id}',function($id, Request $request){
+        $pimgs = App\Pimgs::where('pid', $id)
+                ->orderBy('id')
+                ->get();
+        return view('pimgs',['req' => $request, 'pimgs' => $pimgs]);
+    });
+
+Route::get('/edit_pimgs/{id}',function($id, Request $request){
+        $pimgs = App\Pimgs::where('pid', $id)
+                ->orderBy('id')
+                ->get();
+        $p = App\Products::where('id', $id)->first();
+        return view('editPimgs',['req' => $request, 'pimgs' => $pimgs, 'pId' => $id, 'p' => $p ]);
+    });
+Route::get('/edit_pinfo/{id}',function($id, Request $request){
+        $p = App\Products::where('id', $id)->first();
+        return view('editPinfo',['req' => $request, 'p' => $p]);
+    });
 Route::resource('news','NewsController');
 
+Route::resource('/products','ProductsController');
+
+Route::post('/delete_news/{id}',function($id, Request $request){
+
+        $admin = DB::table('admins')->where('name', $request->name)->where('password', $request->password)->count();
+        if($admin==1){
+            $dead = App\News::where('id', $id)->delete();
+            File::deleteDirectory(base_path('wwwroot/images/news/'.$id));
+        }
+    });
+
+Route::get('/edit_news/{id}',function($id, Request $request){
+        $n = App\News::where('id', $id)->first();
+        return view('editNews',['req' => $request, 'n' => $n]);
+    });
+
+Route::post('/delete_products/{id}',function($id, Request $request){
+
+        $admin = DB::table('admins')->where('name', $request->name)->where('password', $request->password)->count();
+        if($admin==1){
+            $deadp = App\Pimgs::where('pid', $id)->delete();
+            $dead = App\Products::where('id', $id)->delete();
+            File::deleteDirectory(base_path('wwwroot/images/products/'.$id));
+        }
+    });
+
 Route::post('/pages',function (Request $request){
-    $Post = App\Page::where('name', $request->input('type'))->where('lang', $request->lang)->first();
+    $Post = App\Page::where('name', $request->input('type'))->where('lang', $request->input('lang'))->first();
     Log::info($Post);
     $Post->content = $request->input('content');
     Log::info($request->input('content'));
     $Post->save();
-    return response()->json(['status' => '200','msg' => 'success','url' => '/'.$Post->name]);
+    return response()->json(['status' => '200','msg' => 'success','url' => '/'.$request->input('lang').'/'.$Post->name]);
 });

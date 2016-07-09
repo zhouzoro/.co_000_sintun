@@ -5,9 +5,7 @@ $header-height: 96px
 $html-bg: #F4F2F0
 $bg:#60B7E0
 $bg-dark: #29629D
-$carousel-height: 432px
-$carousel-thumb-width: 224px
-$carousel-thumb-height: 112px
+$carousel-height: auto
 $carousel-height-medi: 436px
 $carousel-thumb-width-medi: 184px
 $carousel-thumb-height-medi: 100px
@@ -20,26 +18,90 @@ $post-hero-height: 464px
 $nav-height: 81px
 $bg-blur: rgba(255, 255, 255,0.9)
 $light-border: 1px solid lightgray
-
+$header-bg: #B8B8B8
+$menu-color: #3F4A84
 
 html,body,h1, h2, h3, h4, h5,a,button,label,.button,a,label,span
 	font-family: $font-stack
 
 body
 	min-width: 1000px
+	background-image: url('/images/t (3).png')
+	background-color: #69A6CF
 body.full-screen
 	overflow: hidden
 .main-content
 	box-shadow: 0px 0px 64px -24px rgba(0,0,0,0.7)
+	background: white
+	padding: 0px
+	li.thumb
+		border-color: $bg
+	li.thumb.active
+		background: $bg
+		border-color: $bg
+	.footer-part
+		padding: 12px
+		z-index: 0
+		.label
+			margin-left: 8px
+			margin-bottom: 8px
+		.out-links
+			display: inline-block
+			text-align: center
+			.outlink
+				padding: 2px 8px
 	.main
 		width: 100%
-		min-height: calc(100vh - 88px)
+		min-height: calc(100vh - 118px)
 	header
 		border-bottom: 1px solid $bg-dark
+		background: url('/images/hb.jpg')
+		background-size: cover
+	#scroll-top
+		background: #333
+		height: auto
+		padding: 8px 4px 2px 2px
+		position: fixed
+		bottom: 184px
+		right: -48px
+		color: white
+		text-align: center
+		cursor: pointer
+		border-radius: 5px 0px 0px 5px
+		i
+			font-size: 2rem
+
+	#scroll-top.in
+		right: -4px
+		animation: sin 0.3s ease-out
+
+	#scroll-top.out
+		right: -48px
+		animation: sout 0.3s ease-out
+	@keyframes sin
+		from
+			right: -48px
+		to
+			right: -2px
+	@keyframes sout
+		from
+			right: -2px
+		to
+			right: -48px
 	.colored-label
 		color: $bg
 		text-shadow: 1px 1px 0px $bg-dark
-
+	.ops
+		padding: 4px 8px
+		background: white
+		border-top: 1px solid rgba(0,0,0,0.5)
+		display: block
+		width: 100%
+		div
+			margin: 2px 8px
+	.ops.sticky
+		position: fixed
+		bottom: 2px
 	.header-part
 		display: inline-block
 		height: 87px
@@ -52,13 +114,13 @@ body.full-screen
 			left: 16px
 			font-size: 0.8rem
 			padding: 8px 24px
+			color: $menu-color
 			span
 				position: relative
 				top: -4px 
 		a.logo
 			img
 				width: 176px
-				background: white
 				padding: 0px 24px
 				border-right: 2px solid $bg
 		.nav-bar-co
@@ -69,7 +131,8 @@ body.full-screen
 				padding-left: 12px
 				padding-right: 12px
 				font-size: 1.2rem
-				border-right: 1px solid $bg-dark
+				color: $menu-color
+				border-right: 1px solid $menu-color
 			a.menu-item:last-child
 				border-right: none
 			a.menu-item:first-child
@@ -83,8 +146,8 @@ body.full-screen
 		padding-left: 12px
 	.crum
 		padding-left: 16px
-		padding-top: 4px
 		a
+			margin-top: 4px
 			padding: 4px 2px
 	#carousel-slide
 		height: $carousel-height
@@ -92,15 +155,9 @@ body.full-screen
 			.item
 				width: 100%
 				height: $carousel-height
-				.blur-bg
-					position: absolute
-					width: 100%
-					height: $carousel-height
-					filter: blur(20px) grayscale(20%)
-					z-index: -1
 				img
 					height: $carousel-height
-					width: auto
+					width: 100%
 					margin: auto
 
 	.home-below
@@ -165,9 +222,10 @@ body.full-screen
 				p
 					padding: 12px
 			.product
-				cursor: pointer
 				transition: all 0.3s ease-out
-				padding-right: 12px
+				width: 384px
+				height: 324px
+				overflow: hidden
 				a.control
 					position: absolute
 					display: none
@@ -178,42 +236,70 @@ body.full-screen
 					img
 						transition: all 0.3s ease-out
 						width: 384px
+					.ops
+						cursor: pointer
+						position:absolute
+						width: 384px
+						height: 324px
+						background: rgba(0,0,0,0.5)
+						color: white
+						padding: 86px
+						transform: translateY(324px)
+						a
+							border: 2px solid white
+							color: white
+							opacity: 0.8
+							display: block
+							text-align: center
+							padding: 8px 12px
+							margin-top: 60px
+							margin-left: auto
+							margin-right: auto
+							cursor: pointer
+						a:hover
+							opacity: 1
+							color: black
+							background: white
+				.p-img:hover
+					.ops
+						transform: translateY(0px)
 		.product-frame:last-child
 			border-bottom: none
-		.product-container.full-screen
-			.product
-				position: fixed
+		.product.full-screen
+			position: fixed
+			width: 100vw
+			height: 100vh
+			top: 0px
+			left: 0px
+			background: white
+			z-index: 99
+			padding: 0px
+			a.exit-full-screen.control
+				position: absolute
+				display: inline-block
+				top: -6px
+				left: calc(100% - 42px)
+				color: white
+				padding: 12px
+				border-radius: 0px 0px 0px 36px
+				background: rgba(0,0,0,0.62)
+				opacity: 0.6
+				z-index: 999
+			a.exit-full-screen.control:hover
+				opacity: 1
+			.p-img
+				transition: width height 0.3s ease-out
 				width: 100vw
 				height: 100vh
-				top: 0px
 				left: 0px
-				background: white
-				z-index: 99
-				padding: 0px
-				a.exit-full-screen.control
-					position: absolute
-					display: inline-block
-					top: -6px
-					left: calc(100% - 42px)
-					color: rgba(255,255,255,0.7)
-					padding: 12px
-					border-radius: 0px 0px 0px 36px
-					background: rgba(0,0,0,0.3)
-				a.exit-full-screen.control:hover
-					color: white
-				.p-img
-					transition: width height 0.3s ease-out
-					width: 100vw
+				top: 0px
+				margin: 0px
+				img
+					transition: all 0.3s ease-out
+					width: auto
 					height: 100vh
-					left: 0px
-					top: 0px
-					margin: 0px
-					img
-						transition: all 0.3s ease-out
-						width: auto
-						height: 100vh
-						margin: auto
-						display: block
+					margin: auto
+					display: block
 
 	form.user-access
 		width: 324px
@@ -233,37 +319,295 @@ body.full-screen
 	.article
 		padding: 24px 48px
 		.meta
-			padding-bottom: 12px
+			padding: 2px 8px
+			margin-bottom: 12px
+			border-bottom: 1px dotted lightgray
+			font-size: 0.8rem
 		p
 			text-indent: 24px
-	footer
-		width: 100%
-		text-align: center
-		border-top: 1px solid lightgray
-
+.footer
+	background: #333
+	border-top: 1px solid lightgray
+	color: silver
+	.footer-part
+		padding: 8px 24px
+		text-align: left
 		a
-			color: black
+			color: lightgray
+			font-style: underline
 		a:hover
-			color: gray
+			color: white
 			border-bottom: 1px solid
 		p
 			padding-top: 2px
 			margin: 0px
-		.qrcode
-			width: 128px
-			height: 128px
-			position: fixed
-			top: calc(100vh - 148px)
-			right: 0px
-			background: url('/images/qr.jpg')
-			background-size: contain
-			background-repeat: no-repeat
+	.qrcode
+		width: 128px
+		height: 128px
+		position: fixed
+		top: calc(100vh - 148px)
+		right: 0px
+		background: url('/images/qr.jpg')
+		background-size: contain
+		background-repeat: no-repeat
 .manage-panel
 	form
 		padding: 4px 12px
-
-.edit-news
+#pimg-slide
+	.img
+		width: 100vw
+		height: 100vh
+	a.slid-control
+		position: fixed
+		height: 100vh
+		top: 0
+		padding: 24px
+		i
+			opacity: 0.7
+			font-size: 64px
+			color: black
+			margin-top: calc(50vh - 40px)
+			text-decoration: none
+	a.slid-control.left
+		left: 0
+	a.slid-control.right
+		right: 0
+	a.slid-control:hover
+		i
+			opacity: 1
+.ui.divided.list.edit-news
+	padding: 12px
+	.item
+		padding: 8px 12px 4px 12px
+		.delete-btn
+			padding: 4px 4px
+			color: red
+			border: 1px solid red
+			border-radius: 3px
+			margin-right: 12px
+		.delete-btn:hover
+			color: white
+			background: red
+		.delete-btn.revoke-delete
+			color: lightgray
+			border: 1px solid lightgray
+			opacity: 0.7
+		.delete-btn.revoke-delete:hover
+			opacity: 1
+		.delete-btn.green
+			color: green
+			border: 1px solid green
+			opacity: 0.8
+		.delete-btn.green:hover
+			opacity: 1
+			color: white
+			background: green
 	.date
 		float: right
 	.edit-news-btns
 		display: inline-block
+	.edit-news-btns.product
+		float: right
+		.delete-btn
+			margin-right: 8px
+.cust-modal
+	position: absolute
+	overflow: hidden
+	top: 0px
+	left: 0px
+	width: 100%
+	min-height: 100vh
+	margin: auto
+	background-color: rgba(255,255,255,0.9)
+	.modal-content
+		margin: auto
+		max-width: 1000px
+		.tab
+			margin-top: 48px
+			padding: 48px 24px
+			background: white
+		.ops-modal
+			background: white
+			width: 100%
+			max-width: 1000px
+			display: block
+			position: fixed
+			padding: 4px 12px
+			top: 0
+			z-index: 99
+			.padding-label
+				padding: 9px
+				font-size: 1.2rem
+				font-weight: 600
+		.ops-in-tab
+			width: 100%
+			max-width: 1000px
+			display: block
+			position: fixed
+			z-index: 99
+			top: 60px
+.cust-modal.out
+	display: none
+.rearange
+	padding: 12px
+	.img
+		width: 100%
+		height: 100px
+		margin-top: 8px
+		overflow: hidden
+		img
+			width: 100%
+			height: 100px
+			object-fit: cover
+		.ops
+			width: 100%
+			background: rgba(0,0,0,0.5)
+			transform: translateY(-24px)
+			padding-bottom: 100px
+			color: white
+			a
+				border: 2px solid white
+				color: white
+				opacity: 0.8
+				display: block
+				text-align: center
+				padding: 8px 12px
+				margin-top: 6px
+				margin-left: auto
+				margin-right: auto
+			a.red
+				border: 2px solid red
+				color: red
+			a:hover
+				opacity: 1
+				color: black
+				background: white
+			a.red:hover
+				opacity: 1
+				color: white
+				background: red
+	.img:hover
+		.ops
+			transform: translateY(-120px)
+	.img.header-bg
+		padding: 12px
+		.ops
+			padding: 0px 128px
+			transform: translateY(0px)
+	.img.header-bg:hover
+		.ops
+			transform: translateY(-104px)
+.rearange.ps
+	.img
+		.ops
+			transform: translateY(0px)
+			a
+				padding: 3px 12px
+	.img:hover
+		.ops
+			transform: translateY(-108px)
+.loader
+	position: fixed
+	display: none
+	top: 0
+	right: 0
+	width: calc(100vw + 90px)
+	height: 100vh
+	bottom: 0
+	left: -90px
+	margin: auto
+	transform: translate3d(0, 0, 0)
+	background-color: rgba(255,255,255,0.9)
+	z-index: 999
+.loader.loading
+	display: block
+.dot
+	position: absolute
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	margin: auto
+	width: 18px
+	height: 18px
+	border-radius: 100%
+
+.dot:nth-child(1)
+	background-color: #f44336
+	animation: jump--1 1.2s linear infinite
+	box-shadow: rgba(255, 255, 255, 0.6) 0 0 2px 2px, #f44336 0 0 12px 0
+
+.dot:nth-child(2)
+	background-color: #f1c40f
+	animation: jump--2 1.2s linear infinite
+	box-shadow: rgba(255, 255, 255, 0.6) 0 0 2px 2px, #f1c40f 0 0 12px 0
+
+.dot:nth-child(3)
+	background-color: #03A9F4
+	animation: jump--3 1.2s linear infinite
+	box-shadow: rgba(255, 255, 255, 0.6) 0 0 2px 2px, #03A9F4 0 0 12px 0
+
+
+@keyframes jump--1
+	0%
+		transform: translate3d(0, 0, 0) scale(2)
+	
+	12.5%
+		transform: translate3d(41.66667%, -142.85714%, 0)
+	
+	25%
+		transform: translate3d(250%, -250%, 0)
+	
+	37.5%
+		transform: translate3d(500%, 250%, 0)
+	
+	50%
+		transform: translate3d(500%, 0, 0)
+	
+	100%
+		transform: translate3d(0, 0, 0) scale(2)
+	
+@keyframes jump--2
+	0%
+		transform: translate3d(250%, 0, 0)
+	
+	25%
+		transform: translate3d(0, 0, 0) scale(2)
+	
+	37.5%
+		transform: translate3d(41.66667%, -142.85714%, 0)
+	
+	50%
+		transform: translate3d(250%, -250%, 0)
+	
+	62.5%
+		transform: translate3d(500%, 250%, 0)
+	
+	75%
+		transform: translate3d(500%, 0, 0)
+	
+	100%
+		transform: translate3d(250%, 0, 0)
+	
+
+
+@keyframes jump--3
+	0%
+		transform: translate3d(500%, 0, 0)
+	
+	50%
+		transform: translate3d(0, 0, 0) scale(2)
+	
+	62.5%
+		transform: translate3d(41.66667%, -142.85714%, 0)
+	
+	75%
+		transform: translate3d(250%, -250%, 0)
+	
+	87.5%
+		transform: translate3d(500%, 250%, 0)
+	
+	100%
+		transform: translate3d(500%, 0, 0)
+	
+

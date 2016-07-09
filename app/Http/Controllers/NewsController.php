@@ -19,8 +19,6 @@ class NewsController extends Controller
     {
         $articles = News::select('*')
                 ->orderBy('updated_at', 'desc')
-                ->skip(0)
-                ->take(12)
                 ->get();
         return view('news',['articles' => $articles, 'req' => $request]);
     }
@@ -43,7 +41,16 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
+        $p = News::where('id', $request->input('id'))->first();
+        if($p){
+            $p->author = $request->input('author');
+            $p->title = $request->input('title');
+            $p->content = $request->input('content');
+            $p->save();
+            return response()->json(['status' => '200','msg' => 'success','url' => '/news/'.strval($p->id)]);
+        }
         $newPost = new News;
+        $newPost->id = $request->input('id');
         $newPost->author = $request->input('author');
         $newPost->title = $request->input('title');
         $newPost->content = $request->input('content');

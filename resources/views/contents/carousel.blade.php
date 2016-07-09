@@ -4,6 +4,8 @@
 	    <li data-target="#carousel-slide" data-slide-to='1' class="thumb"'></li>
 	    <li data-target="#carousel-slide" data-slide-to='2' class="thumb"></li>
 	    <li data-target="#carousel-slide" data-slide-to='3' class="thumb"></li>
+	    <li data-target="#carousel-slide" data-slide-to='4' class="thumb"></li>
+	    <li data-target="#carousel-slide" data-slide-to='5' class="thumb"></li>
 	</ol>
     <div role="listbox" class="carousel-inner">
 	    @if(isset($carouselItems))
@@ -22,48 +24,22 @@
 	        @endforeach
 	    @else
 	        <div class="item active">
-		        <div class="blur-bg" style="background: url('/images/carousel/1.jpg');background-size: cover;"></div>
 		        <img src="/images/carousel/1.jpg" alt="slider image" class="slr-img">
-	            <div class="carousel-caption">
-	                <h2 href=""></h2>
-	                <label class="slabelextra">
-	                    <label class="slabeldate"></label>
-	                    <label class="slabelsource"></label>
-	                </label>
-	            </div>
 	        </div>
 	        <div class="item">
-		        <div class="blur-bg" style="background: url('/images/carousel/2.jpg');background-size: cover;"></div>
 		        <img src="/images/carousel/2.jpg" alt="slider image" class="slr-img">
-	            <div class="carousel-caption">
-	                <h2 href=""></h2>
-	                <label class="slabelextra">
-	                    <label class="slabeldate"></label>
-	                    <label class="slabelsource"></label>
-	                </label>
-	            </div>
 	        </div>
 	        <div class="item">
-		        <div class="blur-bg" style="background: url('/images/carousel/3.jpg');background-size: cover;"></div>
 		        <img src="/images/carousel/3.jpg" alt="slider image" class="slr-img">
-	            <div class="carousel-caption">
-	                <h2 href=""></h2>
-	                <label class="slabelextra">
-	                    <label class="slabeldate"></label>
-	                    <label class="slabelsource"></label>
-	                </label>
-	            </div>
 	        </div>
 	        <div class="item">
-		        <div class="blur-bg" style="background: url('/images/carousel/4.jpg');background-size: cover;"></div>
 		        <img src="/images/carousel/4.jpg" alt="slider image" class="slr-img">
-	            <div class="carousel-caption">
-	                <h2 href=""></h2>
-	                <label class="slabelextra">
-	                    <label class="slabeldate"></label>
-	                    <label class="slabelsource"></label>
-	                </label>
-	            </div>
+	        </div>
+	        <div class="item">
+		        <img src="/images/carousel/5.jpg" alt="slider image" class="slr-img">
+	        </div>
+	        <div class="item">
+		        <img src="/images/carousel/6.jpg" alt="slider image" class="slr-img">
 	        </div>
 	    @endif
     </div>

@@ -19,6 +19,7 @@
         <script src="/javascripts/dist/respond.min.js"></script>
     </head>
     <body>
+    <div class="container-fluid">
         <div class="main-content col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 no-boundry">
             @include('layouts.header')
             <div class="main">
@@ -38,8 +39,15 @@
             @section('footer')
                 @include('layouts.footer')
             @show
-               
+            <div class="loader" id="loader">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+                
         </div>
+        
+    </div>
 
         @section('common-scripts')
             <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>

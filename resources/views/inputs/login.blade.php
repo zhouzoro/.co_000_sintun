@@ -1,4 +1,4 @@
-<form class='user-access' id="login" action="/login" method="post">
+<form class='user-access' id="login" action="{{$req->lang == 'en' ? '/en/login' : '/login'}}" method="post">
 	{{ csrf_field() }}
     <p class="tip-message"></p>
     <div class="ui input">
